@@ -1,49 +1,51 @@
 {% set name = "pytest-replay" %}
-{% set version = "1.4.0" %}
-{% set hash_type = "sha256" %}
-{% set hash_value = "a88a30088cc7f27ae0d40e98e748d07824bd8bebe9108e95773791d03be3d1fb" %}
+{% set version = "1.6.0" %}
 
 package:
-  name: '{{ name|lower }}'
-  version: '{{ version }}'
+  name: {{ name|lower }}
+  version: {{ version }}
 
 source:
-  fn: '{{ name }}-{{ version }}.tar.gz'
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  '{{ hash_type }}': '{{ hash_value }}'
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_')}}-{{ version }}.tar.gz
+  sha256: f9a19dc1dd12e562a274ed75912348e8dce0d943942664e3e3d55a3148eeb987
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
-  noarch: python
+  script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+  skip: true  # [py<39]
 
 requirements:
   build:
     - pip
-    - python >=3.6
+    - python
     - setuptools_scm
-    - setuptools
-    - wheel
+    - setuptools >=61
   run:
-    - pytest >=3.0.0
-    - python >=3.6
+    - python
+    - pytest
 
 test:
+  source_files:
+    - tests
   imports:
     - pytest_replay
-  requires:
-    - pip
   commands:
     - pip check
+    - pytest -v tests
+  requires:
+    - pip
+    - pytest
+    - pytest-xdist
 
 about:
   home: https://github.com/ESSS/pytest-replay
   license: MIT
   license_family: MIT
-  license_file: 'LICENSE'
+  license_file: LICENSE
   summary: Saves shell scripts that allow re-execute previous pytest runs to reproduce crashes or flaky tests
   description: "Saves previous test runs and allow re-execute previous pytest runs to reproduce crashes or flaky tests"
   dev_url: https://github.com/ESSS/pytest-replay
+  doc_url: https://github.com/ESSS/pytest-replay/blob/master/README.rst
 
 extra:
   recipe-maintainers:
