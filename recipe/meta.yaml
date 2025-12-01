@@ -15,7 +15,7 @@ build:
   skip: true  # [py<39]
 
 requirements:
-  build:
+  host:
     - pip
     - python
     - setuptools_scm
