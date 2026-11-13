@@ -18,7 +18,6 @@ requirements:
   host:
     - pip
     - python
-    - setuptools_scm
     - setuptools >=61
     - setuptools-scm
   run:
@@ -32,7 +31,7 @@ test:
     - pytest_replay
   commands:
     - pip check
-    - pytest -v tests
+    - pytest -vv tests
   requires:
     - pip
     - pytest
